@@ -3,9 +3,6 @@
 require_relative 'memorize/version'
 
 module Memorize
-  # class Error < StandardError; end
-
-  # Your code goes here...
   def self.included(klass)
     class << klass
       alias_method :__new, :new
@@ -18,5 +15,19 @@ module Memorize
     end
   end
 
+  private
+
   def after_init; end
+
+  def memorize
+    Rails.cache.write_multi attributes, expires_in: 10.minutes
+  end
+
+  def hydrate
+    attributes = Rails.cache.read_multi attributes.keys
+  end
+
+  def clean
+    Rails.cache.delete_multi attributes.keys
+  end
 end
