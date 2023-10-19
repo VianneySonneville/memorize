@@ -9,7 +9,6 @@ module Memorize
       def new(*args)
         e = __new args
         e.after_init
-
         e
       end
     end
